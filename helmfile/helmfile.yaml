@@ -6,6 +6,10 @@ repositories:
     url: https://charts.bitnami.com/bitnami 
   - name: traefik 
     url: https://helm.traefik.io/traefik
+  - name: ingress-nginx
+    url: https://kubernetes.github.io/ingress-nginx
+  - name: jetstack
+    url: https://charts.jetstack.io
 
 
 releases:
@@ -14,6 +18,23 @@ releases:
     values:
     - "deploy/wiben-site/values.yaml"
   - name: traefik
+    installed: false
     chart: traefik/traefik
     values:
     - "deploy/traefik/values.yaml"
+  - name: ingress-nginx
+    chart: ingress-nginx/ingress-nginx
+    values:
+    - "deploy/ingress-nginx/values.yaml"
+  - name: cert-manager
+    namespace: cert-manager
+    chart: jetstack/cert-manager
+    set:
+    - name: ingressShim.defaultIssuerName
+      value: letsencrypt-prod
+    - name: ingressShim.defaultIssuerKind
+      value: ClusterIssuer
+    - name: ingressShim.defaultIssuerGroup
+      value: cert-manager.io
+
+    

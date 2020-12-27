@@ -48,6 +48,7 @@ providers:
 # After the volume has been mounted, add the configs into traefik by using the `additionalArguments` list below, eg:
 # additionalArguments:
 # - "--providers.file.filename=/config/dynamic.toml"
+
 volumes: []
 # - name: public-cert
 #   mountPath: "/certs"
@@ -71,8 +72,21 @@ globalArguments:
 # Additional arguments to be passed at Traefik's binary
 # All available options available on https://docs.traefik.io/reference/static-configuration/cli/
 ## Use curly braces to pass values: `helm install --set="additionalArguments={--providers.kubernetesingress.ingressclass=traefik-internal,--log.level=DEBUG}"`
-additionalArguments: []
-#  - "--providers.kubernetesingress.ingressclass=traefik-internal"
+additionalArguments:
+  - "--providers.kubernetesingress=true"
+  - "--api.dashboard=true"
+  # - "--api.insecure=true"
+  - "--serverstransport.insecureskipverify=true"
+  - "--entryPoints.web.forwardedHeaders.insecure=true"
+  - "--metrics.prometheus=true"
+  - "--entryPoints.metrics.address=:8082"
+  - "--metrics.prometheus.entryPoint=metrics"
+  - "--metrics.prometheus.addServicesLabels=true"
+  - "--metrics.prometheus.addEntryPointsLabels=true"
+  - "--certificatesresolvers.productionresolver.acme.httpchallenge.entrypoint=web"
+  - "--certificatesresolvers.productionresolver.acme.email=wibensonhuang+traefik@gmail.com"
+  - "--certificatesresolvers.productionresolver.acme.storage=/data/acme.json"
+  - "--providers.kubernetesingress.ingressclass=traefik-internal"
 #  - "--log.level=DEBUG"
 
 # Environment variables to be passed to Traefik's binary
@@ -117,7 +131,7 @@ ports:
     # You SHOULD NOT expose the traefik port on production deployments.
     # If you want to access it from outside of your cluster,
     # use `kubectl port-forward` or create a secure ingress
-    expose: false
+    expose: true
     # The exposed port for this service
     exposedPort: 9000
     # The port protocol (TCP/UDP)
@@ -288,4 +302,5 @@ securityContext:
   runAsUser: 65532
 
 podSecurityContext:
-  fsGroup: 65532
+  # fsGroup: 65532
+  fsGroup: null
