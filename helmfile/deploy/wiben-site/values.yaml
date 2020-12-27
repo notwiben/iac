@@ -13,7 +13,7 @@
 image:
   registry: "asia.gcr.io"
   repository: nifty-depth-285109/wiben-site
-  tag: "2073f458024f7c564ef385af3dd54d33913b3aab"
+  tag: "81cd27486b7707bc009d21950d8079ed2daa31c4"
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
